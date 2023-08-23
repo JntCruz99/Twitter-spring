@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -87,10 +88,14 @@ public class Controller {
 
         if (usuarioOptional.isPresent()) {
             Usuario usuario = usuarioOptional.get();
-            List<Twitter> feed = usuario.getSeguidos().stream()
-                    .flatMap(u -> u.getTwitters().stream())
-                    .sorted(Comparator.comparing(Twitter::getData).reversed())
-                    .collect(Collectors.toList());
+            List<Twitter> feed = new ArrayList<>();
+
+            usuario.getSeguidos().forEach(seguido -> {
+                List<Twitter> twittersDoSeguido = seguido.getTwitters();
+                feed.addAll(twittersDoSeguido);
+            });
+
+            feed.sort(Comparator.comparing(Twitter::getData).reversed());
 
             return ResponseEntity.status(HttpStatus.OK).body(feed);
         } else {

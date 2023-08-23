@@ -27,9 +27,6 @@ public class Twitter {
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    @ManyToOne
-    @JoinColumn(name = "feed_id")
-    private Feed feed;
 
     public Long getId() {
         return id;
@@ -47,7 +44,4 @@ public class Twitter {
         return usuario.getUserName();
     }
 
-    public Feed getFeed() {
-        return feed;
-    }
 }
