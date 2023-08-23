@@ -1,5 +1,6 @@
 package com.jntcruz.twitter.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -10,7 +11,6 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "tb_twitter")
 @Setter
-@Getter
 public class Twitter {
 
     @Id
@@ -29,6 +29,23 @@ public class Twitter {
     @JoinColumn(name = "feed_id")
     private Feed feed;
 
+    public Long getId() {
+        return id;
+    }
 
+    public String getMensagem() {
+        return mensagem;
+    }
 
+    public LocalDateTime getData() {
+        return data;
+    }
+
+    public String getUsuario() {
+        return usuario.getUserName();
+    }
+
+    public Feed getFeed() {
+        return feed;
+    }
 }
