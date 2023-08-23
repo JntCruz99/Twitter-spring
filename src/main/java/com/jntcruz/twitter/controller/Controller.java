@@ -22,9 +22,16 @@ public class Controller {
     @Autowired
     TwiterRepository twiterRepository;
 
+
     @PostMapping
     public ResponseEntity<?> criarUsuario(@RequestBody Usuario usuario){
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioRepository.save(usuario));
+        Optional<Usuario> usuarioOptional = usuarioRepository.findByUserName(usuario.getUserName());
+        if (usuarioOptional.isEmpty()){
+            return ResponseEntity.status(HttpStatus.CREATED).body(usuarioRepository.save(usuario));
+        }else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("ERRO: UserName já esta em uso");
+        }
+
     }
 
     @PostMapping("/{iduser}")
@@ -54,6 +61,27 @@ public class Controller {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Usuario não existe");
         }
     }
+    @PostMapping("/seguir/{seguidorId}/{seguidoId}")
+    public ResponseEntity<String> seguirUsuario(@PathVariable Long seguidorId, @PathVariable Long seguidoId) {
+        Optional<Usuario> seguidorOptional = usuarioRepository.findById(seguidorId);
+        Optional<Usuario> seguidoOptional = usuarioRepository.findById(seguidoId);
+
+        if (seguidorOptional.isPresent() && seguidoOptional.isPresent()) {
+            Usuario seguidor = seguidorOptional.get();
+            Usuario seguido = seguidoOptional.get();
+
+            seguidor.getSeguidos().add(seguido);
+            usuarioRepository.save(seguidor);
+
+            return ResponseEntity.ok("Usuário seguido com sucesso.");
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 
 
 }
+
+
+
+

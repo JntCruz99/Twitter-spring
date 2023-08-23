@@ -3,6 +3,7 @@ package com.jntcruz.twitter.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ import java.util.List;
 @Table(name = "tb_feed")
 @Setter
 @Getter
+@ToString
 public class Feed {
 
     @Id
