@@ -10,7 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping(value = "/twitter")
@@ -76,6 +79,22 @@ public class Controller {
             return ResponseEntity.ok("Usuário seguido com sucesso.");
         } else {
             return ResponseEntity.notFound().build();
+        }
+    }
+    @GetMapping("/feed/{usuarioId}")
+    public ResponseEntity<List<Twitter>> getFeedForUsuario(@PathVariable Long usuarioId) {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(usuarioId);
+
+        if (usuarioOptional.isPresent()) {
+            Usuario usuario = usuarioOptional.get();
+            List<Twitter> feed = usuario.getSeguidos().stream()
+                    .flatMap(u -> u.getTwitters().stream())
+                    .sorted(Comparator.comparing(Twitter::getData).reversed())
+                    .collect(Collectors.toList());
+
+            return ResponseEntity.status(HttpStatus.OK).body(feed);
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
