@@ -9,8 +9,8 @@ Uma API simples inspirada no Twitter, onde os usuários podem criar perfis, post
 - Java
 - Spring Boot
 - Spring Data JPA
-- Banco de Dados (por exemplo, MySQL, H2, PostgreSQL)
-- Maven (ou Gradle)
+- PostgreSQL
+- Maven
 - JSON para comunicação
 
 ## Funcionalidades Principais
